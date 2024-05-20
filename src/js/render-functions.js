@@ -1,34 +1,30 @@
-function createGalleryMarkup(items) {
-  const gallery = document.querySelector('.gallery');
-  const markup = items
-    .map(item => {
-      return `<li class="gallery-list-item">
-        <a class="gallery-link" href="${item.largeImageURL}">
-            <img class="gallery-list-item-img" src="${item.webformatURL}" alt="${item.tags}"/>        
-        </a>
-            <div class="text-wrapper">
-                <div class="item-text-wrapper">
-                    <p class ="gallery-list-item-text-1">Likes</p>
-                    <p class ="gallery-list-item-text">${item.likes}</p>
-                </div>
-                <div class="item-text-wrapper">
-                    <p class ="gallery-list-item-text-1">Views</p>
-                    <p class ="gallery-list-item-text">${item.views}</p>
-                </div>
-                <div class="item-text-wrapper">
-                    <p class ="gallery-list-item-text-1">Comments</p>
-                    <p class ="gallery-list-item-text">${item.comments}</p>
-                </div>
-                <div class="item-text-wrapper">
-                    <p class ="gallery-list-item-text-1">Downloads </p>
-                    <p class ="gallery-list-item-text">${item.downloads}</p>
-                </div>
-            </div>
-            
-      </li>`;
-    })
-    .join('');
-  gallery.insertAdjacentHTML('beforeend', markup);
-}
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
-export default createGalleryMarkup;
+export function renderImages(images, container) {
+  if (images.length === 0) {
+    iziToast.error({
+      title: 'Error',
+      message:
+        'Изображения, соответствующие вашему запросу, не найдены. Пожалуйста, попробуйте еще раз.',
+    });
+    return;
+  }
+
+  const markup = images
+    .map(
+      image => `
+    <div class="image-card">
+      <a href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" title=""/></a>
+      <div class="image-info">
+        <p><span>Просмотры: </span>${image.views}</p>
+        <p><span>Загрузки: </span>${image.downloads}</p>
+        <p><span>Лайки: </span>${image.likes}</p>
+        <p><span>Комментарии: </span>${image.comments}</p>
+      </div>
+    </div>
+  `
+    )
+    .join('');
+  container.innerHTML = markup;
+}
