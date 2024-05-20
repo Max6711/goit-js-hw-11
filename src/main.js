@@ -1,36 +1,65 @@
-const form = document.querySelector('.form');
-const loader = document.querySelector('.loader');
-export const searchInput = document.querySelector('.search-input');
-export const startBtn = document.querySelector('.start-btn');
-const galWrap = document.querySelector('.gallery');
-import simpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import { fetchImages } from './js/pixabay-api.js';
+import { renderImages } from './js/render-functions.js';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-import fetchImg from './js/pixabay-api';
-import createGalleryMarkup from './js/render-functions';
-const lightbox = new simpleLightbox('.gallery a', {});
+const form = document.querySelector('#search-form');
+const input = document.querySelector('#search-input');
+const gallery = document.querySelector('#gallery');
+const loader = document.querySelector('#loader'); 
 
-form.addEventListener('submit', evt => {
-  galWrap.innerHTML = '';
-  evt.preventDefault();
-  fetchImg(searchInput)
-    .then(({ hits }) => {
-      if (hits.length === 0) {
-        iziToast.show({
-          message:
-            'Sorry, there are no images matching your search query. Please try again!',
-          color: 'red',
-          position: 'topRight',
+let lightbox; 
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  const query = input.value.trim();
+  if (!query) {
+    iziToast.warning({
+      title: 'Warning',
+      message: 'Пожалуйста, введите ключевое слово для поиска',
+    });
+    return;
+  }
+
+ 
+  loader.classList.remove('hidden'); 
+
+  fetchImages(query)
+    .then(images => {
+      
+      loader.classList.add('hidden'); 
+
+     
+      gallery.innerHTML = '';
+
+      renderImages(images, gallery);
+
+     
+      if (gallery.querySelectorAll('.image-card a').length > 0) {
+        
+        lightbox = new SimpleLightbox('.image-card a', {
+         
         });
+        
+        if (event.target.nodeName !== 'IMG') return;
+        if (lightbox) {
+          lightbox.refresh();
+        } else {
+          console.error('Lightbox is not initialized.');
+        }
+      } else {
+        console.error('No images found for lightbox to handle.');
       }
-
-      createGalleryMarkup(hits);
-      lightbox.refresh();
-      loader.classList.remove('is-open');
+      input.value = '';
     })
-    .catch(Error => console.log(Error));
-
-  form.reset();
+    .catch(error => {
+      console.error(error);
+      iziToast.error({
+        title: 'Error',
+        message:
+          'Произошла ошибка при загрузке изображений. Пожалуйста, попробуйте еще раз.',
+      });
+    });
 });
