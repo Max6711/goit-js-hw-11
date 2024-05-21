@@ -1,65 +1,55 @@
-import { fetchImages } from './js/pixabay-api.js';
-import { renderImages } from './js/render-functions.js';
+import { searchPhotos } from './js/pixabay-api.js';
+import { markupInterface } from './js/render-functions.js';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import { listImg } from './js/render-functions.js';
 
-const form = document.querySelector('#search-form');
-const input = document.querySelector('#search-input');
-const gallery = document.querySelector('#gallery');
-const loader = document.querySelector('#loader'); 
+const searchButton = document.querySelector('.searchButton');
+const clearInput = () => {
+  const input = document.querySelector('.input');
+  input.value = '';
+};
 
-let lightbox; 
+function hideLoader() {
+  const loader = document.querySelector('.loader');
+  loader.style.display = 'none';
+}
 
-form.addEventListener('submit', event => {
+searchButton.addEventListener('click', event => {
   event.preventDefault();
-  const query = input.value.trim();
-  if (!query) {
-    iziToast.warning({
-      title: 'Warning',
-      message: 'Пожалуйста, введите ключевое слово для поиска',
+
+  const input = document.querySelector('.input');
+
+  if (input.value.trim() == '') {
+    iziToast.error({
+      title: 'Error',
+      message:
+        'The search field cannot be empty! Please enter the search query!',
     });
     return;
-  }
-
- 
-  loader.classList.remove('hidden'); 
-
-  fetchImages(query)
-    .then(images => {
-      
-      loader.classList.add('hidden'); 
-
-     
-      gallery.innerHTML = '';
-
-      renderImages(images, gallery);
-
-     
-      if (gallery.querySelectorAll('.image-card a').length > 0) {
-        
-        lightbox = new SimpleLightbox('.image-card a', {
-         
-        });
-        
-        if (event.target.nodeName !== 'IMG') return;
-        if (lightbox) {
-          lightbox.refresh();
-        } else {
-          console.error('Lightbox is not initialized.');
+  } else {
+    searchPhotos(input)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status);
         }
-      } else {
-        console.error('No images found for lightbox to handle.');
-      }
-      input.value = '';
-    })
-    .catch(error => {
-      console.error(error);
-      iziToast.error({
-        title: 'Error',
-        message:
-          'Произошла ошибка при загрузке изображений. Пожалуйста, попробуйте еще раз.',
+        return response.json();
+      })
+      .then(data => {
+        hideLoader();
+        markupInterface(data);
+        if (!listImg.childElementCount) {
+          iziToast.error({
+            title: 'Error',
+            message:
+              'Sorry, there are no images matching your search query. Please try again!',
+          });
+        }
+      })
+      .catch(error => {
+        hideLoader();
+        console.error('Error:', error);
       });
-    });
+  }
+  clearInput();
 });
