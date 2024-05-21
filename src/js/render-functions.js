@@ -1,30 +1,43 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from "simplelightbox";
 
-export function renderImages(images, container) {
-  if (images.length === 0) {
-    iziToast.error({
-      title: 'Error',
-      message:
-        'Изображения, соответствующие вашему запросу, не найдены. Пожалуйста, попробуйте еще раз.',
-    });
-    return;
-  }
+export const listImg = document.querySelector('.list');
+let lightbox;
 
-  const markup = images
-    .map(
-      image => `
-    <div class="image-card">
-      <a href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" title=""/></a>
-      <div class="image-info">
-        <p><span>Просмотры: </span>${image.views}</p>
-        <p><span>Загрузки: </span>${image.downloads}</p>
-        <p><span>Лайки: </span>${image.likes}</p>
-        <p><span>Комментарии: </span>${image.comments}</p>
-      </div>
-    </div>
-  `
-    )
-    .join('');
-  container.innerHTML = markup;
-}
+export const markupInterface = (data) => {
+    const markup = data.hits.map((hit) => {
+    return `
+      <li class="item-list">
+        <a href="${hit.largeImageURL}" class="item-list-link">
+            <img class="item-list-img" src="${hit.webformatURL}" alt="${hit.tags}">
+        </a>
+        <div class='markup-info'>
+            <div class="item-list-info-text">
+                <h3 class="item-list-title">Likes</h3>
+                <p class="item-list-text">${hit.likes}</p>
+            </div>
+            <div class="item-list-info-text">
+                <h3 class="item-list-title">Views</h3>
+                <p class="item-list-text">${hit.views}</p>
+            </div>
+            <div class="item-list-info-text">
+                <h3 class="item-list-title">Comments</h3>
+                <p class="item-list-text">${hit.comments}</p>
+            </div>
+            <div class="item-list-info-text">
+                <h3 class="item-list-title">Downloads</h3>
+                <p class="item-list-text">${hit.downloads}</p>
+            </div>
+        </div>
+      </li>
+    `;
+}).join("");
+listImg.innerHTML = markup;
+
+lightbox = new SimpleLightbox('.item-list-link', {
+    captionsData: 'alt', 
+    captionDelay: 250 ,
+    overlayOpacity: 0.8,
+  });
+
+lightbox.refresh();
+};
