@@ -1,11 +1,19 @@
-import axios from 'axios';
+function showLoader() {
+  const loader = document.querySelector('.loader');
+  loader.style.display = 'block';
+}
 
-const API_KEY = '43943872-0cd26c97fed3a84845e31fcef';
+export function searchPhotos(input) {
+  showLoader(); 
 
-export function fetchImages(query) {
-  return axios
-    .get(
-      `https://pixabay.com/api/?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`
-    )
-    .then(response => response.data.hits)
-    .catch(error => console.error(error));}
+  const searchParams = new URLSearchParams({
+    key: '43803497-a801e9cfe7ea9bdd19d306bb3',
+    q: input.value,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+  });
+  const url = `https://pixabay.com/api/?${searchParams}`;
+
+  return fetch(url);
+}
