@@ -1,19 +1,19 @@
-function showLoader() {
-  const loader = document.querySelector('.loader');
-  loader.style.display = 'block';
-}
+const API_KEY = '43813609-98f1a5b8a61f7cd1a2ca10379'; 
+const BASE_URL = 'https://pixabay.com/api/';
 
-export function searchPhotos(input) {
-  showLoader(); 
+export const fetchPhotosByQuery = (query = 'cat') => {
+    const searchParams = new URLSearchParams({
+        key: API_KEY,
+        q: query,
+        orientation: 'horizontal',
+    });
 
-  const searchParams = new URLSearchParams({
-    key: '43803497-a801e9cfe7ea9bdd19d306bb3',
-    q: input.value,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-  });
-  const url = `https://pixabay.com/api/?${searchParams}`;
+    return fetch(`${BASE_URL}?${searchParams.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
 
-  return fetch(url);
-}
+            return response.json();
+        });
+};
