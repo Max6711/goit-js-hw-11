@@ -1,13 +1,9 @@
-
-import SimpleLightbox from "simplelightbox";
-
-import "simplelightbox/dist/simple-lightbox.min.css";
-
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import { createGalleryItemMarkup } from './js/render-functions.js';
 import { fetchPhotosByQuery } from './js/pixabay-api.js';
-
 
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
@@ -38,7 +34,6 @@ function onSearchFormSubmit(event) {
         .then(imagesData => {
             console.log('Received data:', imagesData); 
 
-            
             if (!imagesData.hits || imagesData.hits.length === 0) {
                 iziToast.show({
                     message: "Sorry, there are no images matching your search query. Please try again!",
@@ -51,14 +46,13 @@ function onSearchFormSubmit(event) {
                 return;
             }
 
-            
             galleryEl.innerHTML = createGalleryItemMarkup(imagesData.hits);
 
             if (lightbox) {
-            lightbox.destroy(); 
+                lightbox.destroy(); 
             }
             lightbox = new SimpleLightbox('.js-gallery a', {
-            captionDelay: 250,
+                captionDelay: 250,
             });
         })
         .catch(error => {
@@ -75,6 +69,5 @@ function onSearchFormSubmit(event) {
             loaderEl.classList.add('is-hidden');
         });
 }
-
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
