@@ -1,182 +1,76 @@
-/**
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
-:root {
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 400;
+@import url('./reset.css');
+@import url('./base.css');
+@import url("../../node_modules/simplelightbox/dist/simple-lightbox.min.css");
+@import url("../../node_modules/izitoast/dist/css/iziToast.min.css");
 
-    color: #242424;
-    background-color: rgba(255, 255, 255, 0.87);
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
+.list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  width: 1128px;
+  margin: 10px auto;
 }
 
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+.item-list{
+  display: flex;
+  flex-direction: column;
+  width: 358px;
+  height: 198px;
+  border: 1px solid #808080;
 }
 
-body {
-    font-family: 'Montserrat', sans-serif;
+.item-list-img{
+  width: 100%;
+  height: 152px;
 }
 
-img {
-    max-width: 100%;
-    display: block;
+.markup-info{
+  display: flex;
+  justify-content: space-around;
 }
 
-ul {
-    list-style-type: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
+.item-list-info-text{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-a {
-    text-decoration: none;
+.searchForm{
+  align-items: center;
+  margin: 35px auto 32px;
+  width: 375px;
 }
 
-.form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 32px;
+.searchButton{
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 91px;
+  background: #4e75ff;
+  border: none;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  color: #fff;
+  height: 40px
 }
 
-.form input {
-    padding: 8px 16px;
-    border: 1px solid rgb(128, 128, 128);
-    border-radius: 4px;
-    width: 272px;
-    outline: none;
-    height: 40px;
+.searchButton:hover{
+  background: #6c8cff;
 }
 
-.form button {
-    padding: 8px 16px;
-    color: rgb(255, 255, 255);
-    font-family: Montserrat;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 4%;
-    text-align: left;
-    border-radius: 8px;
-    background-color: #4e75ff;
-    border: none;
-    cursor: pointer;
+.input{
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  color: #808080;
+  width: 272px;
+  height: 34px;
+  border-radius: 4px;
+  width: 272px;
 }
 
-.container {
-    padding: 36px;
-}
-
-.gallery {
-    display: flex;
-    justify-content: center;
-}
-
-.gallery-list-item {
-    border-radius: 4px;
-    max-width: 360px;
-    border: 1px solid rgb(128, 128, 128);
-    background: url(diego-ph-fIq0tET6llw-unsplash);
-}
-
-.gallery-list-item-img {
-    width: 360px;
-    height: 200px;
-}
-
-.text-wrapper {
-    padding: 4px 20px;
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    align-items: center;
-    max-width: 100%;
-    border-bottom: 1px solid rgb(128, 128, 128);
-    border-left: 1px solid rgb(128, 128, 128);
-    border-right: 1px solid rgb(128, 128, 128);
-    background: rgb(255, 255, 255);
-}
-
-.item-text-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.gallery-list-item-text {
-    color: rgb(46, 47, 66);
-    font-family: Montserrat;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: 4%;
-    text-align: left;
-}
-
-.gallery-list-item-text-1 {
-    color: rgb(46, 47, 66);
-    font-family: Montserrat;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 16px;
-    letter-spacing: 4%;
-    text-align: left;
-}
-
-.loader {
-    width: 48px;
-    height: 48px;
-    border: 3px solid #fff;
-    border-radius: 50%;
-    position: relative;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    display: none;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.loader::after {
-    content: '';
-    box-sizing: border-box;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid;
-    border-color: #ff3d00 transparent;
-}
-
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.is-open {
-    display: block;
+.loader{
+  display: none;
 }
